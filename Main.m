@@ -1,3 +1,5 @@
+%Carl Moser and Jonathan Jacobs
+%Project 3 - Spherical pendulum with air resistance and hinge friction
 
 %Pendulum Variables
 mass = 2;                           %kg

@@ -35,7 +35,7 @@ airDensity = 1.225;                                 %kg/m^3
 hinge = tension*bearingCoefficientFriction;  %N
 
 initParams = [initAng;initV];
-[T,U] = ode45(@move,[0,1000],initParams);
+[T,U] = ode45(@move,[0,10],initParams);
 
 plot(T,U(:,1));
 %Equations of motion
@@ -44,13 +44,9 @@ plot(T,U(:,1));
     angle = params(1);
     velocity  = params(2);
     dAng = velocity;
-    drag = 0;
-    if velocity > 0
-        drag  = -.5*airDensity*dragCoefficient*crossSectionalArea*velocity^2;
-    elseif velocity < 0
-        drag  = .5*airDensity*dragCoefficient*crossSectionalArea*velocity^2;
-    end
-    dangV = -(gravity/length)*sin(angle) + drag/mass;
+    
+    drag  = 5*airDensity*dragCoefficient*crossSectionalArea*velocity^2;
+    dangV = -(gravity/length)*sin(angle) - drag/mass;
     
     res = [dAng;dangV];
     end

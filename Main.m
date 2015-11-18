@@ -13,16 +13,8 @@ gravity = 9.80551;                                  %m/s^2
 length = .3;                                        %m
 initV = 0;                                          %m/s
 initAng = -pi/2;                                    %rad
-acceleration = 0;                                   %m/s^2
 cableWeightperLength = .179;                        %kg/m
 cableWeight = cableWeightperLength * length;        %kg
-
-%Forces
-gravitational = mass*gravity;                       %N
-centrifugal = (mass*initV^2)/radius;             %N
-tension = centrifugal + gravitational*cos(0);   %N
-totalx = 0;
-totaly = 0;
 
 %Second iteration
 %Friction Variables
@@ -30,12 +22,8 @@ bearingCoefficientFriction = .0015;
 dragCoefficient = 0.5;
 airDensity = 1.225;                                 %kg/m^3
 
-%Friction Forces
-
-hinge = tension*bearingCoefficientFriction;  %N
-
 initParams = [initAng;initV];
-[T,U] = ode45(@move,[0,1000],initParams);
+[T,U] = ode45(@move,[0,100],initParams);
 
 plot(T,U(:,1));
 %Equations of motion
@@ -45,12 +33,19 @@ plot(T,U(:,1));
     velocity  = params(2);
     dAng = velocity;
     drag = 0;
+    centrifugal = (mass*velocity^2)/radius;                 %N
+    tension = centrifugal + gravity/length*cos(angle);       %N
     if velocity > 0
         drag  = -.5*airDensity*dragCoefficient*crossSectionalArea*velocity^2;
+        hinge = -tension*bearingCoefficientFriction;        %N
     elseif velocity < 0
         drag  = .5*airDensity*dragCoefficient*crossSectionalArea*velocity^2;
+        hinge = tension*bearingCoefficientFriction;         %N
+    else
+        drag = 0;
+        hinge = 0;
     end
-    dangV = -(gravity/length)*sin(angle) + drag/mass;
+    dangV = -(gravity/length)*sin(angle) + drag/mass + hinge/mass;
     
     res = [dAng;dangV];
     end

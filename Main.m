@@ -1,5 +1,6 @@
 %Carl Moser and Jonathan Jacobs
 %Project 3 - Spherical pendulum with air resistance and hinge friction
+function Main()
 
 %First iteration
 %Pendulum Variables
@@ -10,7 +11,7 @@ radius = (.75*volume/pi)^(1/3);                     %m
 crossSectionalArea = pi*radius^2;                   %m^2
 gravity = 9.80551;                                  %m/s^2
 length = .3;                                        %m
-angle = 0;                                          %degrees
+angle = pi/2;                                      %degrees
 acceleration = 0;                                   %m/s^2
 velocity = 0;                                       %m/s
 cableWeightperLength = .179;                        %kg/m
@@ -31,7 +32,23 @@ airDensity = 1.225;                                 %kg/m^3
 
 %Friction Forces
 drag = .5*airDensity*dragCoefficient*crossSectionalArea*velocity^2; %N
-hinge = tension*bearingCoefficientFriction;                         %N
+hinge = tension*bearingCoefficientFriction;  %N
 
+[T,U] = ode45(@angV,[0,5],angle);
 
-t = 2*pi*sqrt(length/gravity)
+plot(T,U,'b');
+%Equations of motion
+    
+    function res = angV(t,theta)
+        wangs2 = velocity + angAcc(theta);
+        display(wangs2);
+        res = wangs2;
+    end
+
+    function res = angAcc(theta)
+        wangs = -(gravity/length)*sin(theta);
+        %display(wangs);
+        res = wangs;
+    end
+
+end

@@ -1,6 +1,6 @@
 %Carl Moser and Jonathan Jacobs
 %Project 3 - Spherical pendulum with air resistance and hinge friction
-function Main(howLong,howBig,howTime)
+function res = Main(howLong,howBig,howTime)
 
 %First iteration
 %Pendulum Variables
@@ -24,7 +24,7 @@ airDensity = 1.225;                                 %kg/m^3
 
 initParams = [initAng;initV];
 [T,U] = ode45(@move,[0,howTime],initParams);
-
+b = [T,U];
 clf;
 plot(T,U(:,1));
 %Equations of motion
@@ -33,22 +33,23 @@ plot(T,U(:,1));
     angle = params(1);
     velocity  = params(2);
     dAng = velocity;
-    drag = 0;
-    centrifugal = (mass*velocity^2)/radius;                 %N
-    tension = centrifugal + gravity/length*cos(angle);       %N
+    centrifugal = (mass*velocity^2)/length;                 %N
+    tension = centrifugal + mass*gravity*cos(angle);       %N
     if velocity > 0
-        drag  = -.5*airDensity*dragCoefficient*crossSectionalArea*velocity^2;
+        drag  = -.5*length*airDensity*dragCoefficient*crossSectionalArea*velocity^2;
         hinge = -tension*bearingCoefficientFriction;        %N
     elseif velocity < 0
-        drag  = .5*airDensity*dragCoefficient*crossSectionalArea*velocity^2;
+        drag  = .5*length*airDensity*dragCoefficient*crossSectionalArea*velocity^2;
         hinge = tension*bearingCoefficientFriction;         %N
     else
         drag = 0;
         hinge = 0;
     end
-    dangV = -(gravity/length)*sin(angle) + drag/mass + hinge/mass;
+
+    dangV = (-(gravity*length)*sin(angle) + drag)/(mass*(length^2));
     
     res = [dAng;dangV];
     end
 
+res = b;
 end

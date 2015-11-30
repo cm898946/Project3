@@ -1,4 +1,7 @@
 library(deSolve)
+library(plotrix)
+
+setwd('C:/Users/cmoser/Documents/GitHub/Project3/images')
 
 mass <- 2
 density <- 7.8*1000
@@ -40,12 +43,18 @@ move <- function(t, y, parms){
     	drag <- 0
         hinge <- 0
     }
-    dangV <- (-(gravity*length)*sin(angle) + drag)/(mass*(length^2))
+    dangV <- (-(gravity*length)*sin(angle) + drag + hinge)/(mass*(length^2))
 
 	list(c(dAng, dangV)) })
 }
 
-times <- seq(from = 0, to = 24*60*60, by = 1)
+times <- seq(from = 0, to = 30, by = .01)
 out <- ode(times = times, y = initParams, parms = parms, func = move, method = rkMethod("ode45"))
 
-plot(out)
+png(file="example%03d.png", width=800, heigh=800)
+for(i in 1:(nrow(out)/3)){
+	plot(x=0, y=0, xlim=c(-10,10), ylim=c(-9,1), xaxt='n', yaxt='n', ann=FALSE)
+	segments(0, 0, -8*sin(out[3*i,2]), -4*cos(out[3*i,2]))
+	draw.circle(-8*sin(out[3*i,2]), -4*cos(out[3*i,2]),1,nv=100,border=NULL,col="black",lty=1,lwd=1)
+	}
+dev.off()

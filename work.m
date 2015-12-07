@@ -2,9 +2,9 @@
 
 clear;
 
-options = 15;
-lengths = linspace(0.01,10,options);
-masses = linspace(0.01,10,options);
+options = 30;
+lengths = linspace(1,7,options);
+masses = linspace(1,7,options);
 stopTime = zeros(options,options);
 
 for i = 1:options
@@ -14,4 +14,8 @@ for i = 1:options
         display(j);
     end
 end
+
+clf;
 pcolor(lengths,masses,stopTime);
+hold on;
+contour(lengths,masses,stopTime,[3600,3600],'r');

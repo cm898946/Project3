@@ -6,9 +6,9 @@ function res = Main(howLong,howBig,howTime)
 %Pendulum Variables
 mass = howBig;                                           %kg
 density = 7.80*1000;                                %kg/m^3
-volume = 0.0015;                              %m^3
-radius = 0.0325;  %(.75*volume/pi)^(1/3);                     %m
-crossSectionalArea = 0.003;%pi*radius^2;                   %m^2
+volume = mass/density;                              %m^3
+radius = (.75*volume/pi)^(1/3);                     %m
+crossSectionalArea = pi*radius^2;                   %m^2
 gravity = 9.80551;                                  %m/s^2
 length = howLong;                                        %m
 initV = 0;                                          %m/s
@@ -26,9 +26,9 @@ options = odeset('Events',@events,'RelTol', 1e-5);
 initParams = [initAng;initV;energySpent];
 [T,U,TE, YE, IE] = ode45(@move,[0,howTime],initParams,options);
 b = TE;
-clf;
+%clf;
 %subplot(2,1,1);
-plot(T,U(:,1));
+%plot(T,U(:,1));
 %subplot(2,1,2);
 %plot(T,U(:,3));
 %Equations of motion

@@ -26,9 +26,9 @@ options = odeset('Events',@events,'RelTol', 1e-5);
 initParams = [initAng;initV;energySpent];
 [T,U,TE, YE, IE] = ode45(@move,[0,howTime],initParams,options);
 b = TE;
-%clf;
+clf;
 %subplot(2,1,1);
-%plot(T,U(:,1));
+plot(T,U(:,1));
 %subplot(2,1,2);
 %plot(T,U(:,3));
 %Equations of motion
@@ -57,10 +57,11 @@ b = TE;
     end
 
     function [value,isterminal,direction] = events(t,y)
-       value  = abs(y(1)) + abs(y(2)) - 0.05;
+       value  = abs(y(1)) + abs(y(2)) - 0.005;
        isterminal = 1;
        direction = 0;
     end
 
 res = b;
+
 end

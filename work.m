@@ -2,12 +2,12 @@
 
 clear;
 
-options = 30;
+options = 200;
 lengths = linspace(1,7,options);
-masses = linspace(1,7,options);
+masses = linspace(1,5,options);
 stopTime = zeros(options,options);
 
-for i = 1:options
+parfor i = 1:options
     for j = 1:options
         stopTime(i,j) = Main(lengths(i),masses(j),86400);
         display(i);
@@ -16,6 +16,7 @@ for i = 1:options
 end
 
 clf;
-pcolor(lengths,masses,stopTime);
+h = pcolor(lengths,masses,stopTime);
+set(h, 'EdgeColor', 'none');
 hold on;
 contour(lengths,masses,stopTime,[3600,3600],'r');
